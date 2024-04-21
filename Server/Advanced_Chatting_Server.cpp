@@ -1,4 +1,4 @@
-﻿#include "pch.h"
+#include "pch.h"
 #include <stdlib.h>
 #define _USE_INIT_WINDOW_  // 윈도우 전역 초기화 함수를 직접 구현하도록 지정 (InitWindow)
 #include <stdio.h> // sprintf_s, fopen_s, fclose 함수를 사용하기 위해
@@ -231,14 +231,8 @@ void ModifyUserData(AD *ap_app)
     }
     else AddEventString(ap_app, "아이디 미입력: 아이디는 반드시 입력해야 합니다.");
     if (pw_len) {
-        if (pw_len == p_user->info.password_len || memcmp(pw, p_user->info.password, pw_len)) {
-            AddEventString(ap_app, "동일한 패스워드가 존재합니다!!");
-            return;
-        }
-        else {
-            p_user->info.password_len = pw_len;
-            memcpy(p_user->info.password, pw, pw_len + 1);
-        }
+        p_user->info.password_len = pw_len;
+        memcpy(p_user->info.password, pw, pw_len + 1);
     }
     else AddEventString(ap_app, "패스워드 미입력: 패스워드는 반드시 입력해야 합니다!");
 
@@ -258,9 +252,10 @@ void DelUserData(AD *ap_app)
 {
     int index = ListBox_GetCurSel(ap_app->p_user_list);
     NRUD *p_user = (NRUD *)ListBox_GetItemDataPtr(ap_app->p_user_list, index);
+    // 에디트 컨트롤 내 아이디가 존재하면 지운다
     if (p_user->info.id_len) { // 등록된 사용자가 있는지 체크
         char str[256];
-        sprintf_s(str, 256, "%s (%s)", p_user->info.id, p_user->info.name); // 아이디와 이름을 사용해서 문자열 구성
+        sprintf_s(str, 256, "%s", "정말 삭제하시겠습니까?"); // 아이디와 이름을 사용해서 문자열 구성
         if (IDYES == MessageBox(gh_main_wnd, str, "선택한 사용자를 삭제하시겠습니까?", MB_ICONQUESTION | MB_YESNO)) {
             DisconnectUserByError(&ap_app->server_data, p_user, "사용자 삭제를 위해 접속 해제", 1);
             p_user->info.id_len = 0; // 아이디 정보 리셋
@@ -271,6 +266,58 @@ void DelUserData(AD *ap_app)
             ListBox_SetCurSel(ap_app->p_user_list, index); // 선택된 항목을 갱신하여 변경된 사항 출력
             if (ap_app->server_data.p_last_user == p_user) { // 변경된 정보가 가장 마지막 사용자인지 체크
                 FindLastUser(ap_app); // 막지막 위치에 있던 사용자를 삭제하여 다시 마지막 사용자를 찾는다.
+            }
+        }
+    }
+    // 에디트 컨트롤 내 패스워드가 존재하면 지운다
+    if (p_user->info.password_len) { // 등록된 사용자가 있는지 체크
+        char pw_str[256];
+        sprintf_s(pw_str, 256, "%s", "정말 삭제하시겠습니까?"); // 아이디와 이름을 사용해서 문자열 구성
+        if (IDYES == MessageBox(gh_main_wnd, pw_str, "선택한 사용자를 삭제하시겠습니까?", MB_ICONQUESTION | MB_YESNO)) {
+            DisconnectUserByError(&ap_app->server_data, p_user, "사용자 삭제를 위해 접속 해제", 1);
+            p_user->info.password_len = 0; // 비밀번호 정보 리셋
+            *p_user->info.password = 0;
+            p_user->ip_len = 0; // 아이피 정보 리셋
+            *p_user->ip = 0;
+
+            ListBox_SetCurSel(ap_app->p_user_list, index); // 선택된 항목을 갱신하여 변경된 사항 출력
+            if (ap_app->server_data.p_last_user == p_user) { // 변경된 정보가 가장 마지막 사용자인지 체크
+                FindLastUser(ap_app); // 마지막 위치에 있던 사용자를 삭제하여 다시 마지막 사용자를 찾는다.
+            }
+        }
+    }
+    // 에디트 컨트롤 내 이름이 존재하면 지운다
+    if (p_user->info.name_len)
+    {
+        char name_str[256];
+        sprintf_s(name_str, 256, "%s", "정말 삭제하시겠습니까?"); // 아이디와 이름을 사용해서 문자열 구성
+        if (IDYES == MessageBox(gh_main_wnd, name_str, "선택한 사용자를 삭제하시겠습니까?", MB_ICONQUESTION | MB_YESNO)) {
+            DisconnectUserByError(&ap_app->server_data, p_user, "사용자 삭제를 위해 접속 해제", 1);
+            p_user->info.name_len = 0; // 이름 정보 리셋
+            *p_user->info.name = 0;
+            p_user->ip_len = 0; // 아이피 정보 리셋
+            *p_user->ip = 0;
+
+            ListBox_SetCurSel(ap_app->p_user_list, index); // 선택된 항목을 갱신하여 변경된 사항 출력
+            if (ap_app->server_data.p_last_user == p_user) { // 변경된 정보가 가장 마지막 사용자인지 체크
+                FindLastUser(ap_app); // 마지막 위치에 있던 사용자를 삭제하여 다시 마지막 사용자를 찾는다.
+            }
+        }
+    }
+    // 에디트 컨트롤 내 기타 정보가 존재하면 지운다
+    if (p_user->info.etc_len) {
+        char etc_str[256];
+        sprintf_s(etc_str, 256, "%s", "정말 삭제하시겠습니까?"); // 아이디와 이름을 사용해서 문자열 구성
+        if (IDYES == MessageBox(gh_main_wnd, etc_str, "선택한 사용자를 삭제하시겠습니까?", MB_ICONQUESTION | MB_YESNO)) {
+            DisconnectUserByError(&ap_app->server_data, p_user, "사용자 삭제를 위해 접속 해제", 1);
+            p_user->info.etc_len = 0; // 기타 정보 리셋
+            *p_user->info.etc = 0;
+            p_user->ip_len = 0; // 아이피 정보 리셋
+            *p_user->ip = 0;
+
+            ListBox_SetCurSel(ap_app->p_user_list, index); // 선택된 항목을 갱신하여 변경된 사항 출력
+            if (ap_app->server_data.p_last_user == p_user) { // 변경된 정보가 가장 마지막 사용자인지 체크
+                FindLastUser(ap_app); // 마지막 위치에 있던 사용자를 삭제하여 다시 마지막 사용자를 찾는다.
             }
         }
     }

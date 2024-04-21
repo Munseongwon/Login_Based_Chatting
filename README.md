@@ -1,30 +1,41 @@
-# EasyWin32 튜토리얼<br>
-## C언어 기본 문법 숙지 및 EW32 라이브러리를 활용한 GUI 환경 기반에서의 실습 진행
-## 학습 기간
-> 24.4.2 ~ 24.4.16(계속 복습 중)
+# 로그인 기반 채팅 프로그램<br>
+## EW32 라이브러리를 활용한 클라이언트 - 서버 간의 소켓 통신 채팅 프로그램
+### 진행 기간
+> 24.4.7 ~ 24.4.21
 
-## 사용 언어
+### 사용 언어
 ![Langauge:C](https://img.shields.io/badge/Language-C-red) ![platform:Visual Studio](https://img.shields.io/badge/Platform-Visual_Studio-red)
 <br>
 
-## 진행한 챕터
-### 1. 프로그래밍과 메모리 그리고 C언어 - EasyWin32 기본 설명 및 간단한 문자열 출력하기 실습
-<img src="01/Capture/Capture1-1.png" alt="Intro Screen" width="300px" height="300px"><img src="01/Capture/Capture1-2.png" alt="playing Screen" width="300px" height="300px">
-### 2. C언어 기본 문법에 대한 설명 - 변수 실습(주소 계산 및 연속된 좌표 상의 사각형 출력하기 실습)
-<img src="02/Screen/Capture01.png" alt="Intro Screen" width="300px" height="300px"><img src="02/Screen/capture02.png" alt="playing Screen" width="300px" height="300px">
-### 3. 실행 흐름 제어하는 방법 - 조건문 및 반복문 실습(마우스 클릭 시 사각형, 원그리기 실습, 선 그리기 실습, 격자 무늬 상태 변화 실습)
-<img src="03/Screen/Capture03-01.png" alt="Intro Screen" width="300px" height="300px"><img src="03/Screen/Capture03-02.png" alt="playing Screen" width="300px" height="300px"><img src="03/Screen/Capture03-03.png" alt="Intro Screen" width="300px" height="300px"><img src="03/Screen/Capture03-04(1).png" alt="playing Screen" width="300px" height="300px"><img src="03/Screen/Capture03-04(2).png" alt="Intro Screen" width="300px" height="300px"><img src="03/Screen/Capture03-05.png" alt="playing Screen" width="300px" height="300px">
-### 4. 시프트 연산자와 비트 연산자 그리고 변수의 유효 기간과 사용 범위 - 비트 및 시프트 연산자 실습(시프트와 비트 연산자 이동을 활용한 비트 계산기 실습)
-<img src="04/Screen/Caputre_4-1.png" alt="Intro Screen" width="300px" height="300px"><img src="04/Screen/Capture_4-2.png" alt="playing Screen" width="300px" height="300px"><img src="04/Screen/Capture_4-3.png" alt="playing Screen" width="300px" height="300px"><img src="04/Screen/Capture_4-4.png" alt="playing Screen" width="300px" height="300px">
-### 5. 배열과 포인터 그리고 표준 입력 함수에 대하여 - 배열과 포인터 실습(메모리 위치, 오목 화면 그리기(바둑돌 포함), 랜덤 원 그리기 실습)
-<img src="05/Screen/Capture5-1.png" alt="Intro Screen" width="300px" height="300px"><img src="05/Screen/Caputre5-1(1).png" alt="playing Screen" width="300px" height="300px"><img src="05/Screen/Capture5-2.png" alt="Intro Screen" width="300px" height="300px"><img src="05/Screen/Capture5-3.png" alt="playing Screen" width="300px" height="300px"><img src="05/Screen/Capture5-4.png" alt="Intro Screen" width="300px" height="300px"><img src="05/Screen/Capture5-5.png" alt="playing Screen" width="300px" height="300px">
-### 6. 메모리 할당과 다차원 포인터 그리고 구조체 - 메모리 할당, 다차원 포인터, 구조체 실습(랜덤 원 그리기, 채팅창 화면 구현, 파일 및 디렉토리 탐색 프로그램 실습)
-<img src="06/Screen/Capture/Caputre_6-1.png" alt="Intro Screen" width="300px" height="300px"><img src="06/Screen/Capture/Capture_6-2.png" alt="playing Screen" width="300px" height="300px"><img src="06/Screen/Capture/Capture_6-3.png" alt="Intro Screen" width="300px" height="300px"><img src="06/Screen/Capture/Capture_6-4.png" alt="playing Screen" width="300px" height="300px"><img src="06/Screen/Capture/Capture_6-5.png" alt="Intro Screen" width="300px" height="300px"><img src="06/Screen/Capture/Capture_6-6.png" alt="playing Screen" width="300px" height="300px">
+### 진행한 챕터
+<img src="03/Advanced_chatting_program.PNG" alt="Intro Screen" width="400px" height="300px"><img src="03/Server.PNG" alt="Intro Screen" width="400px" height="300px"><img src="03/client.PNG" alt="Intro Screen" width="400px" height="300px">
 <br>
 
-## 왜 이것을 공부하는 가?
-- Do it C언어 강좌를 수강하며 책을 읽으면서 콘솔 환경에서만 실습 코드를 작성하고 연습함
-- 기존에 계속 사용하고 있던 EW32 라이브러리를 활용하여 다양한 예제를 만들어보면서 눈으로 직접 익히고자 실습 진행
-- 이미 카페 매니저로 계신 김성엽 대표님께서 좋은 예제들을 많이 만들어 놓으시고 코드도 직접 사용하고 익힐 수 있도록 올려놓으심
-- 이 코드를 바탕으로 추가할 만한 기능은 없는 지 탐색하고 나만의 프로그램을 만들고자 하기에 강좌보면서 익힘
-- 찐(?)튜토리얼 느낌으로 복습하면서 C언어와 친밀감을 쌓기 위해 올려놓음
+### 기능
+- 공통적인 부분은 대화창의 내용을 계속 스크롤하면서 보는 것이 귀찮을 수 있으니 대화 내용 삭제
+- 클라이언트 같은 경우 음악 재생 및 중지, 실습 화면 캡처, 매크로를 활용한 프로그램 접속 추가, 시계 표시
+- 서버 같은 경우 정보 변경 시 아이디 미입력 뿐만 아니라 비밀번호 미입력도 리스트 박스에 표시
+- 클라이언트에도 서버 접속 시 아이디/패스워드 미입력, 잘못된 아이디/패스워드 입력에도 서버 접속 x
+=> 메시지 박스를 각기 다르게 두어(접속 성공 -> MB_ICONINFORMATION, 실패 -> MB_ICONERROR) 표시
+- 클라이언트 맨 하단 리스트 박스를 추가로 생성하여 사용자가 입력한 키에 대한 후킹 데이터를 표시할 수 있도록 함
+- 클라이언트 상단 오른쪽에 이미지 애니메이션 표시
+
+### 문제점 및 해결
+- 아이디가 중복되어 있는 사용자가 있다면 이벤트 창에 표시되었음
+- 이와 같은 로직의 코드를 똑같이 사용해서 비밀번호가 중복된 사용자도 가려내기 위해서 작성
+하지만 계속해서 이벤트 창에 표시가 되어 있지 않았음
+- 문제의 코드를 분석해 보니 다음과 같았음
+
+
+
+
+
+
+
+- CheckStringThatMakesUpId(pw)의 코드는 아이디의 유효성을 체크하는 부분
+=> 비밀번호는 숫자든 영문자 + 숫자 + 특수 문자의 조합이든 크게 중요하지 않으므로 제거
+- 신규 유저의 비밀번호와 기존 유저의 비밀번호를 비교하여 중복성 방지
+=> pw_len != p_user->info.password_len 에서 pw_len == p_user->info.password_len으로 변경
+- 신규 유저라면 입력된 그대로 비밀번호가 에디트 컨트롤에 등록되고 에디트 컨트롤에 복사됨
+- 아이디는 입력한 상태이지만 비밀번호는 입력하지 않으면 이벤트 리스트 박스에 미입력된 상태라고 표시
+

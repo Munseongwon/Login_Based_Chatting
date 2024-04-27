@@ -1,4 +1,4 @@
-﻿#include "pch.h"
+#include "pch.h"
 #include <stdlib.h>
 #define _USE_INIT_WINDOW_  // 윈도우 전역 초기화 함수를 직접 구현하도록 지정 (InitWindow)
 #include <stdio.h> // sprintf_s, fopen_s, fclose 함수를 사용하기 위해

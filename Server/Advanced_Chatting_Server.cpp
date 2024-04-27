@@ -1,36 +1,5 @@
 #include "pch.h"
-#include <stdlib.h>
-#define _USE_INIT_WINDOW_  // 윈도우 전역 초기화 함수를 직접 구현하도록 지정 (InitWindow)
-#include <stdio.h> // sprintf_s, fopen_s, fclose 함수를 사용하기 위해
-#include "tipsware.h"
-
-#define IDC_SERVICE_START_BTN    1000  // 서비스 시작 버튼의 아이디
-#define IDC_SERVICE_STOP_BTN     1001  // 서비스 멈춤 버튼의 아이디
-#define IDC_MODIFY_USER_BTN      1100  // 사용자 정보 변경 버튼의 아이디
-#define IDC_DEL_USER_BTN         1101  // 사용자 정보 삭제 버턴의 아이디
-#define IDC_DEL_CHAT_BTN         1102  // 채팅창 내용 전부 삭제
-#define IDC_USER_LIST            2000  // 사용자 목록을 관리하는 리스트 박스의 아이디
-#define IDC_EVENT_LIST           2001  // 상태 목록을 관리하는 리스트 박스의 아이디
-#define IDC_IP_COMBO             3000  // 서비스 아피 목록을 관리하는 콤보 박스의 아이디
-#define IDC_USER_LEVEL_COMBO     3001  // 사용자 등급 목록을 관리하는 콤보 박스의 아이디
-#define IDC_USER_ID_EDIT         4000  // 아이디 입력용 에디트 컨트롤의 아이디
-#define IDC_USER_PASSWORD_EDIT   4001  // 암호 입력용 에디트 컨트롤의 아이디
-#define IDC_USER_NAME_EDIT       4002  // 이름 입력용 에디트 컨트롤의 아이디
-#define IDC_USER_ETC_EDIT        4003  // 기타 정보 입력용 에디트 컨트롤의 아이디
-
-// 이 서버가 사용할 회원 등급 목록 (9단계)
-const char *gp_level_string[] = { "손님", "임시회원", "일반회원", "성실회원", "우수회원", "공동체", "운영진", "VIP", "관리자" };
-int g_level_len[] = { 4, 8, 8, 8, 8, 6, 6, 3, 6 };
-
-#define REQ_USER_CHAT                 21    // C -> S 채팅 데이터 전달
-#define ANS_USER_CHAT                 22    // S -> C 채팅 데이터 전달 (브로드 캐스팅)
-
-typedef struct ApplicationData  // 프로그램에서 사용할 내부 데이터
-{
-    NeoServerData server_data;  // 서버 소켓 서비스를 위해 필요한 정보
-    void *p_user_list;  // 사용자 목록을 관리하는 리스트 박스
-    void *p_event_list;  // 프로그램 상태 목록을 관리하는 리스트 박스
-} AD;
+#include "Advanced_Chatting_Server.h"
 
 // 자신이 사용할 윈도우의 전역 속성을 초기화 하는 함수
 void InitWindow()
@@ -40,8 +9,6 @@ void InitWindow()
     // 윈도우 속성을 수정한다. 캡션과 테두리가 없는 기본 윈도우를 생성한다.
     g_wnd_style = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_CLIPCHILDREN;
 }
-
-
 
 // 이벤트를 목록에 추가하는 함수
 void AddEventString(AD *ap_app, const char *ap_string)
@@ -398,25 +365,25 @@ void DrawUserInfoItem(int index, char *ap_str, int a_str_len, void *ap_data, int
     SelectFontObject("맑은 고딕", 15, 0);  // 글꼴을 변경한다.
 
     if (p->info.id_len) {
-        ::SetTextColor(h_dc, RGB(98, 190, 255));
-        ::TextOut(h_dc, 5, ap_rect->top + 2, p->info.id, p->info.id_len);
-        ::SetTextColor(h_dc, RGB(228, 228, 198));
-        ::TextOut(h_dc, 105, ap_rect->top + 2, p->info.name, p->info.name_len);
-        ::TextOut(h_dc, 185, ap_rect->top + 2, gp_level_string[p->info.level], g_level_len[p->info.level]);
-        ::TextOut(h_dc, 265, ap_rect->top + 2, p->info.etc, p->info.etc_len);
+        SetTextColor(h_dc, RGB(98, 190, 255));
+        TextOut(h_dc, 5, ap_rect->top + 2, p->info.id, p->info.id_len);
+        SetTextColor(h_dc, RGB(228, 228, 198));
+        TextOut(h_dc, 105, ap_rect->top + 2, p->info.name, p->info.name_len);
+        TextOut(h_dc, 185, ap_rect->top + 2, gp_level_string[p->info.level], g_level_len[p->info.level]);
+        TextOut(h_dc, 265, ap_rect->top + 2, p->info.etc, p->info.etc_len);
 
-        if (p->is_block) ::TextOut(h_dc, ap_rect->right - 120, ap_rect->top + 2, "보안 문제로 중지", 17);
+        if (p->is_block) TextOut(h_dc, ap_rect->right - 120, ap_rect->top + 2, "보안 문제로 중지", 17);
         else {
-            if (p->ip_len) ::TextOut(h_dc, ap_rect->right - 120, ap_rect->top + 2, p->ip, p->ip_len);
+            if (p->ip_len) TextOut(h_dc, ap_rect->right - 120, ap_rect->top + 2, p->ip, p->ip_len);
         }
     }
     else {
-        ::SetTextColor(h_dc, RGB(138, 138, 138));
-        ::TextOut(h_dc, 5, ap_rect->top + 2, "--- 비어있음 ---", 17);
+        SetTextColor(h_dc, RGB(138, 138, 138));
+        TextOut(h_dc, 5, ap_rect->top + 2, "--- 비어있음 ---", 17);
     }
 }
 
-int main()
+void DrawUI()
 {
     AD app_data = { 0, };
     ChangeWorkSize(660, 515);  // 창의 크기를 조정한다.    
@@ -455,7 +422,11 @@ int main()
     TextOut(175, 303, "이름");
     TextOut(259, 303, "등급");
     TextOut(344, 303, "기타");
-    ;
+}
+
+int main()
+{
+    DrawUI();      // 화면 내에 모든 컨트롤을 그림
     ShowDisplay(); // 정보를 윈도우에 출력한다.
     return 0;
 }

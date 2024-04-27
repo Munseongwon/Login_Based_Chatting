@@ -24,7 +24,42 @@
 - 아이디가 중복되어 있는 사용자가 있다면 이벤트 창에 표시되었음
 - 이와 같은 로직의 코드를 똑같이 사용해서 비밀번호가 중복된 사용자도 가려내려 했으나 계속해서 이벤트 창에 표시가 되어 있지 않았음
 - 문제의 코드를 분석해 보니 다음과 같았음
-<img src="Capture.PNG" alt="Intro Screen" width="500px" height="600px">
+// 새롭게 다시 구성한 코드 -> 비밀번호 미입력 시에만 메시지 출력
+```c
+// 수정 전
+if(CheckStringThatMakesUpID(id)) { // 아이디 문자 구성에 대한 유효성 체크
+    if (len != p_user->info.id_len || memcmp(id, p_user->info.id, len)) { // 아이디 변경 여부 체크
+        if (GetDupUserByID(&ap_app->server_data, p_user, id, len)) { // 이미 사용된 아이디인지 체크
+            AddEventString(ap_app, "동일한 아이디가 존재해서 사용자 정보를 변경할 수 없습니다.");
+            return;
+        }
+        p_user->info.id_len = len; // 아이디 길이 저장
+        memcpy(p_user->info.id, id, len + 1); // 아이디 저장
+    }
+  ... (코드 중략)...
+}
+else AddEventString(ap_app, "아이디 오류: 아이디는 반드시 입력해야 합니다."); // 아이디 미입력 처리
+// 아이디 미입력 처리만 하였을 뿐 비밀번호 미입력 여부는 표시하지 않음
+
+// 수정 후
+if(CheckStringThatMakesUpID(id)) { // 아이디 문자 구성에 대한 유효성 체크
+    if (len != p_user->info.id_len || memcmp(id, p_user->info.id, len)) { // 아이디 변경 여부 체크
+        if (GetDupUserByID(&ap_app->server_data, p_user, id, len)) { // 이미 사용된 아이디인지 체크
+            AddEventString(ap_app, "동일한 아이디가 존재해서 사용자 정보를 변경할 수 없습니다.");
+            return;
+        }
+        p_user->info.id_len = len; // 아이디 길이 저장
+        memcpy(p_user->info.id, id, len + 1); // 아이디 저장
+    }
+  ... (코드 중략)...
+}
+else AddEventString(ap_app, "아이디 오류: 아이디는 반드시 입력해야 합니다."); // 아이디 미입력 처리
+if (pw_len) {
+    p_user->info.password_len = pw_len;
+    memcpy(p_user->info.password, pw, pw_len + 1);
+}
+else AddEventString(ap_app, "패스워드 미입력: 패스워드는 반드시 입력해야 합니다!"); // 비밀번호 미입력 처리
+```
 
 - <b>CheckStringThatMakesUpId(pw)</b>의 코드는 아이디의 유효성을 체크하는 부분 => 비밀번호는 숫자든 영문자 + 숫자 + 특수 문자의 조합이든 크게 중요하지 않으므로 제거
 - <b>GetDupUserById(&ap_app->server_data, p_user, pw, pw_len)</b>의 코드는 중복된 <b>아이디</b>가 있는 지 체크하는 함수 => 비밀번호에는 구현되지 않았으므로 제거
